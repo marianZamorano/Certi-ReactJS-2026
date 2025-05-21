@@ -6,10 +6,10 @@ export const ListComponent = ({ refranes }: ListComponentProps) => {
   return (
     <div>
       refranes:
-      {refranes.map((refran) => {
+      {refranes.map((refran, index) => {
         return (
           <div
-            key={refran}
+            key={index}
             className="bg-white 
                             border 
                             border-gray-300 
