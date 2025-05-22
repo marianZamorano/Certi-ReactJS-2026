@@ -1,6 +1,33 @@
 import { Button } from "./Button";
+import type {FormPaymentData} from "../pages/PaymentPage";
+import { useEffect, useState } from "react";
 
-export const PaymentFormComponent = () => {
+interface PaymentFormComponentProps{
+  formData: FormPaymentData;
+}
+
+export const PaymentFormComponent = ({ formData }: PaymentFormComponentProps) => {
+  const [ errorPayment, setErrorPayment ] = useState(false);
+  const [ errorMessagePayment, setErrorMessagePayment ] = useState("");
+  
+  const isValidPayment = (payment: string) => {
+    if(payment === "") {
+      return true;
+    }
+    const regex = /^[a-zA-Z\s]+$/;
+    return regex.test(payment);
+  };
+
+  useEffect(() => {
+    if (!isValidPayment(formData.payment)) {
+      setErrorPayment(true);
+      setErrorMessagePayment("El nombre del gasto no es valido");
+    }
+    if (!isValidAmount(formData.payment)) {
+      setErrorPayment(true);
+      setErrorMessagePayment("El nombre del gasto no es valido");
+    }
+  }, [formData])
   return (
     <form className="max-w-sm mx-auto ">
       <div className="mb-5">
@@ -17,6 +44,14 @@ export const PaymentFormComponent = () => {
           placeholder="Nombre del Gasto"
           required
         />
+        { errorPayment && (
+          <label
+          htmlFor="email"
+          className="block mb-2 text-sm font-medium text-red-500 dark:text-white"
+        >
+          {errorMessagePayment}
+        </label>)
+        }
       </div>
       <div className="mb-5">
         <label
