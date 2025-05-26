@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FormPaymentData } from "../pages/PaymentPage";
+import { getPaymentType } from "../services/PaymentService";
+
 import { Button } from "./Button";
 
 interface PaymentFormComponentProps {
@@ -12,12 +14,24 @@ export const PaymentFormComponent = ({
   const [errorMessagePayment, setErrorMessagePayment] = useState("");
 
   const isValidPayment = (payment: string) => {
-    if(payment === "") {
-        return true;
+    if (payment === "") {
+      return true;
     }
     const regex = /^[a-zA-Z\s]+$/;
     return regex.test(payment);
   };
+
+  const getPayments = async () => {
+    const response = await getPaymentType();
+    console.log("PAYMENTS ========", response);
+
+    return response;
+  };
+
+  useEffect(() => {
+    const result = getPayments();
+  }, []);
+
   useEffect(() => {
     if (!isValidPayment(formData.payment)) {
       setErrorPayment(true);

@@ -1,0 +1,8 @@
+{
+  "paymentTypes": [
+    { "id": "1", "name": "Alimentacion"},
+    { "id": "2", "name": "Entretenimiento" },
+    { "id": "3", "name": "Transporte" },
+    { "id": "4", "name": "Otros" }
+  ]
+}
