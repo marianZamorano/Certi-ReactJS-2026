@@ -23,10 +23,10 @@ export const PaymentFormComponent = ({
       setErrorPayment(true);
       setErrorMessagePayment("El nombre del gasto no es valido");
     }
-     if (!isValidAmount(formData.payment)) {
-      setErrorPayment(true);
-      setErrorMessagePayment("El nombre del gasto no es valido");
-    }
+    //  if (!isValidAmount(formData.payment)) {
+    //   setErrorPayment(true);
+    //   setErrorMessagePayment("El nombre del gasto no es valido");
+    // }
   }, [formData]);
   return (
     <form className="max-w-sm mx-auto ">
@@ -77,8 +77,11 @@ export const PaymentFormComponent = ({
         <select
           id="payments"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          name="payments"
+          // value={formData.type}
+          // onChange={(e) => formData.setPaymentType(e.target.value)
         >
-          <option selected>Seleccionar tipo de Gasto</option>
+          <option>Seleccionar tipo de Gasto</option>
           <option value="1">Alimentacion</option>
           <option value="2">Juegos</option>
           <option value="3">Transporte</option>
@@ -91,7 +94,7 @@ export const PaymentFormComponent = ({
       >
         Register new account
       </button> */}
-      <Button text="Ingresar Gasto" />
+      {/* <Button text="Ingresar Gasto" /> */}
     </form>
   );
 };
