@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 
 interface PaymentFormComponentProps {
   formData: FormPaymentData;
+  setPayments: (payments: FormPaymentData[]) => void;
 }
 
 const formSchema = object({
@@ -17,6 +18,7 @@ const formSchema = object({
 
 export const PaymentFormComponent = ({
   formData,
+  setPayments
 }: PaymentFormComponentProps) => {
   const [errorPayment, setErrorPayment] = useState(false);
   const [errorMessagePayment, setErrorMessagePayment] = useState("");
@@ -27,8 +29,10 @@ export const PaymentFormComponent = ({
     setPaymentTypes(response);
   };
 
-  const saveData = (formValue) => {
-    console.log("formData", formValue);
+  const saveData = (formValue: FormPaymentData ) => {
+    setPayments((prevPayments) => {
+      return [...prevPayments,formValue];
+    }); 
   };
   const formik = useFormik({
     initialValues: {
@@ -38,7 +42,13 @@ export const PaymentFormComponent = ({
     },
     validationSchema: formSchema,
     onSubmit: (values) => {
-      saveData(values);
+      try {
+        saveData(values);
+      } catch (error) {
+        console.error("Error saving payment data:", error);
+      } finally {
+        formik.resetForm();
+      }
     },
   });
 
@@ -107,7 +117,7 @@ export const PaymentFormComponent = ({
           <option>Seleccionar tipo de Gasto</option>
           {paymentTypes.length > 0 &&
             paymentTypes.map((type) => (
-              <option key={type.id} value={type.id}>
+              <option key={type.id} value={type.name}>
                 {type.name}
               </option>
             ))}

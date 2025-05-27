@@ -8,6 +8,8 @@ export interface FormPaymentData {
   type: string;
 }
 function PaymentPage() {
+  const [payments, setPayments] = useState<FormPaymentData[]>([]);
+  
   const [formData, setFormData] = useState<FormPaymentData>({
     payment: "",
     amount: 0,
@@ -16,10 +18,10 @@ function PaymentPage() {
   return (
     <div className="h-screen flex flex-row">
       <div className="w-1/2 bg-white p-4">
-        <PaymentFormComponent formData={formData} />
+        <PaymentFormComponent formData={formData} setPayments={setPayments} />
       </div>
       <div className=" w-1/2 bg-amber-100 p-4">
-        <ListPaymentsComponent />
+        <ListPaymentsComponent payments={payments} />
       </div>
     </div>
   );
