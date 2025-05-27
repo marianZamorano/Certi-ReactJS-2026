@@ -1,49 +1,54 @@
 import { useEffect, useState } from "react";
 import type { FormPaymentData } from "../pages/PaymentPage";
 import { getPaymentType } from "../services/PaymentService";
+import { object, string, number } from "yup";
 
 import { Button } from "./Button";
+import { useFormik } from "formik";
 
 interface PaymentFormComponentProps {
   formData: FormPaymentData;
 }
+
+const formSchema = object({
+  payment: string().required(),
+  amount: number().required().positive().integer(),
+  type: string().required(),
+});
+
 export const PaymentFormComponent = ({
   formData,
 }: PaymentFormComponentProps) => {
   const [errorPayment, setErrorPayment] = useState(false);
   const [errorMessagePayment, setErrorMessagePayment] = useState("");
-
-  const isValidPayment = (payment: string) => {
-    if (payment === "") {
-      return true;
-    }
-    const regex = /^[a-zA-Z\s]+$/;
-    return regex.test(payment);
-  };
+  const [paymentTypes, setPaymentTypes] = useState<string[]>([]);
 
   const getPayments = async () => {
     const response = await getPaymentType();
-    console.log("PAYMENTS ========", response);
-
-    return response;
+    setPaymentTypes(response);
   };
 
-  useEffect(() => {
-    const result = getPayments();
-  }, []);
+  const saveData = (formValue) => {
+    console.log("formData", formValue);
+  };
+  const formik = useFormik({
+    initialValues: {
+      payment: formData.payment || "",
+      amount: formData.amount || "",
+      type: formData.type || "",
+    },
+    validationSchema: formSchema,
+    onSubmit: (values) => {
+      saveData(values);
+    },
+  });
 
   useEffect(() => {
-    if (!isValidPayment(formData.payment)) {
-      setErrorPayment(true);
-      setErrorMessagePayment("El nombre del gasto no es valido");
-    }
-    //  if (!isValidAmount(formData.payment)) {
-    //   setErrorPayment(true);
-    //   setErrorMessagePayment("El nombre del gasto no es valido");
-    // }
-  }, [formData]);
+    getPayments();
+  }, []);
+
   return (
-    <form className="max-w-sm mx-auto ">
+    <form className="max-w-sm mx-auto" onSubmit={formik.handleSubmit}>
       <div className="mb-5">
         <label
           htmlFor="email"
@@ -96,19 +101,29 @@ export const PaymentFormComponent = ({
           // onChange={(e) => formData.setPaymentType(e.target.value)
         >
           <option>Seleccionar tipo de Gasto</option>
-          <option value="1">Alimentacion</option>
-          <option value="2">Juegos</option>
-          <option value="3">Transporte</option>
-          <option value="4">Otros</option>
+          {paymentTypes.length > 0 &&
+            paymentTypes.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
         </select>
       </div>
       {/* <button
+          type="submit"
+          onClick= {saveData}
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Register new account
+        </button> */}
+      {/* <Button text="Ingresar Gasto" type="submit" />  */}
+      <button
         type="submit"
+        onClick={saveData}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         Register new account
-      </button> */}
-      {/* <Button text="Ingresar Gasto" /> */}
+      </button>
     </form>
   );
 };
