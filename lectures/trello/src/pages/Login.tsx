@@ -14,11 +14,11 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 
 const loginSchema = yup.object({
-  email: yup.string().email("No es un email valido").required(),
+  email: yup.string().email("No es un email valido").required("El email es requerido"),
   password: yup
     .string()
     .min(6, "La contraseña debe tener al menos 6 caracteres")
-    .required(),
+    .required("La contraseña es requerida"),
 });
 
 function LoginPage() {
@@ -37,13 +37,14 @@ function LoginPage() {
 
   return (
     <Container maxWidth="xs">
-      <Box sx={{ marginTop: 8 }}>
+      <Box sx={{ marginY: 8 }}>
         <CardContent
           sx={{
             marginTop: 25,
             padding: 4,
             textAlign: "center",
             boxShadow: 3,
+            paddingBottom: 12,
           }}
         >
           <Typography
@@ -62,6 +63,8 @@ function LoginPage() {
               name="email"
               onChange={formik.handleChange}
               value={formik.values.email}
+              helperText={formik.touched.email && formik.errors.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -82,6 +85,8 @@ function LoginPage() {
               name="password"
               onChange={formik.handleChange}
               value={formik.values.password}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
               slotProps={{
                 input: {
                   startAdornment: (
