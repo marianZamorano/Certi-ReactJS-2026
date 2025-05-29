@@ -12,9 +12,16 @@ import Container from "@mui/material/Container";
 import PasswordIcon from "@mui/icons-material/Password";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { login } from "../services/authService";
+import { useNavigate } from "react-router-dom";
+import Toast from "../components/toast";
+import { useState } from "react";
 
 const loginSchema = yup.object({
-  email: yup.string().email("No es un email valido").required("El email es requerido"),
+  email: yup
+    .string()
+    .email("No es un email valido")
+    .required("El email es requerido"),
   password: yup
     .string()
     .min(6, "La contraseña debe tener al menos 6 caracteres")
@@ -22,21 +29,37 @@ const loginSchema = yup.object({
 });
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const [loginError, setLoginError] = useState(false);
 
-  
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: "",
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted with values:", values);
+    onSubmit: async (values) => {
+      const responseLogin = await login(values.email, values.password);
+      if (!responseLogin) {
+        setLoginError(true);
+        formik.resetForm();
+        return;
+      }
+      localStorage.setItem("token", JSON.stringify(responseLogin.token));
+      navigate("/app/dashboard", {
+        replace: true,
+      });
     },
   });
 
   return (
     <Container maxWidth="xs">
+      <Toast
+        open={loginError}
+        message="Usuario Incorrecto"
+        severity="error"
+        onClose={() => setLoginError(false)}
+      />
       <Box sx={{ marginY: 8 }}>
         <CardContent
           sx={{

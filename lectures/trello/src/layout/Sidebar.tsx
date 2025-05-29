@@ -47,13 +47,13 @@ const Sidebar = ({
         <ListItem disablePadding>
           <ListItemButton
             component={Link}
-            to="/about"
-            selected={location.pathname === "/about"}
+            to="/Login"
+            selected={location.pathname === "/login"}
           >
             <ListItemIcon>
               <Info />
             </ListItemIcon>
-            <ListItemText primary="About" />
+            <ListItemText primary="Cerrar Sesion" />
           </ListItemButton>
         </ListItem>
       </List>
