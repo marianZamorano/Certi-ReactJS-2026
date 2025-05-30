@@ -1,4 +1,3 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -20,19 +19,26 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 interface CustomDialogsProps {
   open: boolean;
+  title: string;
   onClose: () => void;
+  children: React.ReactNode;
 }
 
-export const CustomDialogs = ({ onClose, open }: CustomDialogsProps) => {
+export const CustomDialogs = ({
+  onClose,
+  open,
+  title,
+  children,
+}: CustomDialogsProps) => {
   return (
-    <React.Fragment>
+    <>
       <BootstrapDialog
         onClose={onClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+          {title}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -46,29 +52,13 @@ export const CustomDialogs = ({ onClose, open }: CustomDialogsProps) => {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-            auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-            cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-            dui. Donec ullamcorper nulla non metus auctor fringilla.
-          </Typography>
-        </DialogContent>
+        <DialogContent dividers>{children}</DialogContent>
         <DialogActions>
           <Button autoFocus onClick={onClose}>
             Save changes
           </Button>
         </DialogActions>
       </BootstrapDialog>
-    </React.Fragment>
+    </>
   );
 };

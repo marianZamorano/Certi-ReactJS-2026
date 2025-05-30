@@ -9,13 +9,19 @@ function DashboardPage() {
     setOpenDialog(true);
   };
 
-  const closeDialogHandler = () => { 
+  const closeDialogHandler = () => {
     setOpenDialog(false);
   };
 
   return (
     <Container maxWidth="lg">
-      <CustomDialogs open={openDialog} onClose={closeDialogHandler} />
+      <CustomDialogs
+        title="Agregar Proyecto"
+        open={openDialog}
+        onClose={closeDialogHandler}
+      >
+        <p>Formulario para agregar un nuevo proyecto</p>
+      </CustomDialogs>
       <Button variant="contained" onClick={openDialogHandler}>
         Agregar Proyecto
       </Button>
