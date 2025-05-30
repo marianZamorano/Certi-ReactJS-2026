@@ -1,10 +1,24 @@
 import { Button, Container, Grid } from "@mui/material";
 import { CustomCard } from "../components/Card";
+import { CustomDialogs } from "../components/Dialog";
+import { useState } from "react";
 
 function DashboardPage() {
+  const [openDialog, setOpenDialog] = useState(false);
+  const openDialogHandler = () => {
+    setOpenDialog(true);
+  };
+
+  const closeDialogHandler = () => { 
+    setOpenDialog(false);
+  };
+
   return (
     <Container maxWidth="lg">
-      <Button variant="contained">Agregar Proyecto</Button>
+      <CustomDialogs open={openDialog} onClose={closeDialogHandler} />
+      <Button variant="contained" onClick={openDialogHandler}>
+        Agregar Proyecto
+      </Button>
       <Grid
         container
         spacing={2}
