@@ -1,23 +1,28 @@
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Button, Container, Grid } from "@mui/material";
+import { CustomCard } from "../components/Card";
 
 function DashboardPage() {
-  const navigate = useNavigate();
-  const goToLogin = () => {
-    navigate("/login");
-  };
-  const goToRegister = () => {
-    navigate("/register");
-  };
   return (
-    <>
-      <Button variant="contained" onClick={goToLogin}>
-        Login
-      </Button>
-      <Button variant="contained" onClick={goToRegister}>
-        Register
-      </Button>
-    </>
+    <Container maxWidth="lg">
+      <Button variant="contained">Agregar Proyecto</Button>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          marginTop: 2,
+        }}
+      >
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <CustomCard title="Proyecto 1" />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <CustomCard title="Proyecto 2" />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <CustomCard title="Proyecto 3" />
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

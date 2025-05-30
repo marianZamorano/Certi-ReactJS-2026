@@ -6,10 +6,12 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Divider
+  Divider,
 } from "@mui/material";
 import { Home, Info } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
+import { clearStorage } from "../helpers/localStorage";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 
 const drawerWidth = 240;
 
@@ -38,9 +40,9 @@ const Sidebar = ({
             selected={location.pathname === "/"}
           >
             <ListItemIcon>
-              <Home />
+              <BusinessCenterIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Proyectos" />
           </ListItemButton>
         </ListItem>
 
@@ -49,6 +51,7 @@ const Sidebar = ({
             component={Link}
             to="/Login"
             selected={location.pathname === "/login"}
+            onClick={clearStorage}
           >
             <ListItemIcon>
               <Info />

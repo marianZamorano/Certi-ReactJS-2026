@@ -16,6 +16,7 @@ import { login } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import Toast from "../components/toast";
 import { useState } from "react";
+import { setStorage } from "../helpers/localStorage";
 
 const loginSchema = yup.object({
   email: yup
@@ -45,7 +46,8 @@ function LoginPage() {
         formik.resetForm();
         return;
       }
-      localStorage.setItem("token", JSON.stringify(responseLogin.token));
+      setStorage("token", responseLogin.token);
+      setStorage("user", responseLogin);
       navigate("/app/dashboard", {
         replace: true,
       });

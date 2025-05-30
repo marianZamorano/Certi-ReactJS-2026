@@ -21,6 +21,14 @@ export const AppRoutes = () => {
         >
           <Route path="dashboard" element={<DashboardPage />} />
         </Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoutes>
+              <Layout />
+            </ProtectedRoutes>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
