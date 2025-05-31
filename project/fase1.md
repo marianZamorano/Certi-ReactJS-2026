@@ -39,7 +39,7 @@
 ## 2. Sistema de Votación Ciudadana
 
 ### Requerimientos
-- Registro/Login de ciudadanos (validación CI - Cam(2fase))
+- Login de ciudadanos (validación CI - Cam(2fase))
 - Selección automatica de recinto.
 - Visualización de estado del votante si este ya emitio o no su voto.
 - Panel administrador con CRUD para gestionar  mesas y recintos
@@ -51,11 +51,11 @@
 ### Métrica de evaluación
 | Criterio                                 | Puntaje |
 |------------------------------------------|---------|
-| Flujo de reserva y generación de turno   | 20%     |
+| Registro (Ciudadanos - Admin)/ Login de ciudadanos   | 20%     |
 | Panel de administración funcional        | 15%     |
-| Visualización clara de horarios y mesas  | 10%     |
+| Visualizacion de papeleta de votacion simulada  | 10%     |
 | Formulario validado correctamente        | 10%     |
-| QR generado funcionalmente               | 10%     |
+| Formulario para registrar postulante               | 10%     |
 | UI clara y responsiva con MUI            | 15%     |
 | JSON Server estructurado correctamente   | 10%     |
 | Documentación técnica (README)    | 10%     |
