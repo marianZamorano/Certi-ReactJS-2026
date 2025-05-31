@@ -58,7 +58,7 @@
 | QR generado funcionalmente               | 10%     |
 | UI clara y responsiva con MUI            | 15%     |
 | JSON Server estructurado correctamente   | 10%     |
-| Documentación clara en README            | 10%     |
+| Documentación técnica (README)    | 10%     |
 
 ---
 
@@ -83,7 +83,7 @@
 | Cancelación y feedback visual      | 10%     |
 | UI organizada y clara              | 15%     |
 | Backend bien estructurado (JSON Server) | 10% |
-| Documentación clara                | 10%     |
+| Documentación técnica (README)    | 10%     |
 
 ---
 
@@ -107,4 +107,4 @@
 | Panel admin funcional              | 10%     |
 | Formularios y validaciones         | 10%     |
 | Interfaz moderna y clara con MUI   | 10%     |
-| Documentación clara en README      | 10%     |
+| Documentación técnica (README)    | 10%     |
