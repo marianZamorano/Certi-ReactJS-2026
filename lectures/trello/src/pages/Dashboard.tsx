@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { getStorage } from "../helpers/localStorage";
-import { getProjectByUserId } from "../services/projectService";
+import { createProject, getProjectByUserId } from "../services/projectService";
+import { v4 as uuidv4 } from "uuid";
 
 const projectSchema = Yup.object({
   projectName: Yup.string().required("El nombre del proyecto es requerido"),
@@ -16,7 +17,18 @@ function DashboardPage() {
       projectName: "",
     },
     validationSchema: projectSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      const project = {
+        id: uuidv4(),
+        name: values.projectName,
+        owner: user.id,
+        date: new Date().toISOString(),
+      };
+      const response = await createProject(project);
+      if (response) {
+        setProjects((prevProjects) => [...prevProjects, response]);
+        formik.resetForm();
+      }
       setOpenDialog(false);
     },
   });

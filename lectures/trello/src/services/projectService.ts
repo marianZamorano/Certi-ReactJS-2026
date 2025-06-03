@@ -9,3 +9,19 @@ export const getProjectByUserId = async (userId: string) => {
     throw error;
   }
 };
+
+interface Project {
+  id: string;
+  name: string;
+  owner: string;
+  date: string;
+}
+export const createProject = async (project: Project) => {
+  try {
+    const response = await jsonServerInstance.post("/projects", project);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating project:", error);
+    throw error;
+  }
+};
