@@ -1,9 +1,24 @@
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid, TextField } from "@mui/material";
 import { CustomCard } from "../components/Card";
 import { CustomDialogs } from "../components/Dialog";
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
+const projectSchema = Yup.object({
+  projectName: Yup.string().required("El nombre del proyecto es requerido"),
+});
 function DashboardPage() {
+  const formik = useFormik({
+    initialValues: {
+      projectName: "",
+    },
+    validationSchema: projectSchema,
+    onSubmit: (values) => {
+      
+      setOpenDialog(false);
+    },
+  });
   const [openDialog, setOpenDialog] = useState(false);
   const openDialogHandler = () => {
     setOpenDialog(true);
@@ -19,8 +34,18 @@ function DashboardPage() {
         title="Agregar Proyecto"
         open={openDialog}
         onClose={closeDialogHandler}
+        onSubmit={formik.handleSubmit}
       >
-        <p>Formulario para agregar un nuevo proyecto</p>
+        <TextField
+          label="Nombre del Proyecto"
+          id="projectName"
+          value={formik.values.projectName}
+          onChange={formik.handleChange}
+          error={
+            formik.touched.projectName && Boolean(formik.errors.projectName)
+          }
+          helperText={formik.touched.projectName && formik.errors.projectName}
+        />
       </CustomDialogs>
       <Button variant="contained" onClick={openDialogHandler}>
         Agregar Proyecto

@@ -22,6 +22,7 @@ interface CustomDialogsProps {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  onSubmit: () => void;
 }
 
 export const CustomDialogs = ({
@@ -29,6 +30,7 @@ export const CustomDialogs = ({
   open,
   title,
   children,
+  onSubmit,
 }: CustomDialogsProps) => {
   return (
     <>
@@ -37,27 +39,35 @@ export const CustomDialogs = ({
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {title}
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={(theme) => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log("Form submitted");
+            onSubmit();
+          }}
         >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers>{children}</DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={onClose}>
-            Save changes
-          </Button>
-        </DialogActions>
+          <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+            {title}
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={(theme) => ({
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: theme.palette.grey[500],
+            })}
+          >
+            <CloseIcon />
+          </IconButton>
+          <DialogContent dividers>{children}</DialogContent>
+          <DialogActions>
+            <Button type="submit">
+              Save changes
+            </Button>
+          </DialogActions>
+        </form>
       </BootstrapDialog>
     </>
   );

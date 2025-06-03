@@ -14,5 +14,25 @@
       "password": "dev123",
       "token": "def456"
     }
+  ], 
+  "projects": [
+    {
+      "id": 1,
+      "name": "Project Alpha",
+      "date": "2023-10-01",
+      "owner": "1"
+    },
+    {
+      "id": 2,
+      "name": "Project Beta",
+      "date": "2023-10-02",
+      "owner": "1"
+    },
+    {
+      "id": 3,
+      "name": "Project Gamma",
+      "date": "2023-10-03",
+      "owner": "2"
+    }
   ]
 }
