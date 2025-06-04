@@ -16,12 +16,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import LabelIcon from "@mui/icons-material/Label";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
+import type { Project } from "../interfaces/projectInterface";
+import { useAuth } from "../contexts/AuthContext";
 
 interface CustomCardProps {
   title?: string;
   action?: () => void;
+  project?: Project;
 }
-export const CustomCard = ({ title, action }: CustomCardProps) => {
+export const CustomCard = ({ title, action, project }: CustomCardProps) => {
+  console.log(project);
+  const { user, isAuth } = useAuth();
+  console.log(user, isAuth);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 

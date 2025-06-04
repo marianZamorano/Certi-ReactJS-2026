@@ -23,6 +23,11 @@ const projectSchema = Yup.object({
 });
 function DashboardPage() {
   const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       projectName: "",
@@ -43,9 +48,6 @@ function DashboardPage() {
       setOpenDialog(false);
     },
   });
-  const [user, setUser] = useState(null);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [openDialog, setOpenDialog] = useState(false);
   const openDialogHandler = () => {
     setOpenDialog(true);
   };
@@ -131,6 +133,7 @@ function DashboardPage() {
                   goToProject(project.id);
                 }}
                 title={project.name}
+                project={project}
               />
             </Grid>
           ))
