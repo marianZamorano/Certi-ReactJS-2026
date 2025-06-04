@@ -1,4 +1,11 @@
-import { Button, Container, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { CustomCard } from "../components/Card";
 import { CustomDialogs } from "../components/Dialog";
 import { useEffect, useState } from "react";
@@ -7,11 +14,15 @@ import * as Yup from "yup";
 import { getStorage } from "../helpers/localStorage";
 import { createProject, getProjectByUserId } from "../services/projectService";
 import { v4 as uuidv4 } from "uuid";
+import AddIcon from "@mui/icons-material/Add";
+import type { Project } from "../interfaces/projectInterface";
+import { useNavigate } from "react-router-dom";
 
 const projectSchema = Yup.object({
   projectName: Yup.string().required("El nombre del proyecto es requerido"),
 });
 function DashboardPage() {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       projectName: "",
@@ -33,7 +44,7 @@ function DashboardPage() {
     },
   });
   const [user, setUser] = useState(null);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const openDialogHandler = () => {
     setOpenDialog(true);
@@ -60,6 +71,10 @@ function DashboardPage() {
     }
   }, []);
 
+  const goToProject = (projectId: string) => {
+    navigate(`/app/projects/${projectId}`);
+  };
+
   return (
     <Container maxWidth="lg">
       <CustomDialogs
@@ -79,9 +94,28 @@ function DashboardPage() {
           helperText={formik.touched.projectName && formik.errors.projectName}
         />
       </CustomDialogs>
-      <Button variant="contained" onClick={openDialogHandler}>
-        Agregar Proyecto
-      </Button>
+
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mt={4}
+        mb={4}
+      >
+        <Typography variant="h6" fontWeight="bold">
+          Mis Proyectos
+        </Typography>
+
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={openDialogHandler}
+        >
+          Agregar Proyecto
+        </Button>
+      </Box>
+
       <Grid
         container
         spacing={2}
@@ -91,8 +125,13 @@ function DashboardPage() {
       >
         {projects.length > 0 ? (
           projects.map((project) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-              <CustomCard key={project.id} title={project.name} />
+            <Grid key={project.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+              <CustomCard
+                action={() => {
+                  goToProject(project.id);
+                }}
+                title={project.name}
+              />
             </Grid>
           ))
         ) : (
