@@ -20,3 +20,13 @@ export const createProject = async (project: Project) => {
     throw error;
   }
 };
+
+export const deleteProject = async (projectId: string) => {
+  try {
+    const response = await jsonServerInstance.delete(`/projects/${projectId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating project:", error);
+    throw error;
+  }
+};

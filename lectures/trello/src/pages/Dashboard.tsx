@@ -12,7 +12,11 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { getStorage } from "../helpers/localStorage";
-import { createProject, getProjectByUserId } from "../services/projectService";
+import {
+  createProject,
+  deleteProject,
+  getProjectByUserId,
+} from "../services/projectService";
 import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
 import type { Project } from "../interfaces/projectInterface";
@@ -54,6 +58,14 @@ function DashboardPage() {
 
   const closeDialogHandler = () => {
     setOpenDialog(false);
+  };
+
+  const removeProject = async (idProject: string) => {
+    await deleteProject(idProject);
+    setProjects((previewProject) =>
+      previewProject.filter((project) => project.id !== idProject)
+    );
+    console.log("deleting project");
   };
 
   const getProjects = async (userId: string) => {
@@ -134,6 +146,7 @@ function DashboardPage() {
                 }}
                 title={project.name}
                 project={project}
+                deleteProject={() => removeProject(project.id)}
               />
             </Grid>
           ))

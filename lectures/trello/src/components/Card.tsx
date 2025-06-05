@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
-import LabelIcon from "@mui/icons-material/Label";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import type { Project } from "../interfaces/projectInterface";
@@ -23,8 +22,14 @@ interface CustomCardProps {
   title?: string;
   action?: () => void;
   project?: Project;
+  deleteProject: () => void;
 }
-export const CustomCard = ({ title, action, project }: CustomCardProps) => {
+export const CustomCard = ({
+  title,
+  action,
+  project,
+  deleteProject,
+}: CustomCardProps) => {
   console.log(project);
   const { user, isAuth } = useAuth();
   console.log(user, isAuth);
@@ -89,18 +94,10 @@ export const CustomCard = ({ title, action, project }: CustomCardProps) => {
                 vertical: "top",
                 horizontal: "right",
               }}
-              PaperProps={{
-                elevation: 3,
-                sx: {
-                  borderRadius: 2,
-                  minWidth: 200,
-                },
-              }}
             >
               <MenuItem
                 onClick={(event) => {
                   event.stopPropagation();
-                  // onEdit?.();
                   handleCloseMenu();
                 }}
               >
@@ -111,20 +108,9 @@ export const CustomCard = ({ title, action, project }: CustomCardProps) => {
               </MenuItem>
 
               <MenuItem
-                onClick={() => {
-                  // onTag?.();
-                  handleCloseMenu();
-                }}
-              >
-                <ListItemIcon>
-                  <LabelIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Cambiar etiqueta" />
-              </MenuItem>
-
-              <MenuItem
-                onClick={() => {
-                  onDelete?.();
+                onClick={(event) => {
+                  event.stopPropagation();
+                  deleteProject();
                   handleCloseMenu();
                 }}
                 sx={{ color: "error.main" }}
