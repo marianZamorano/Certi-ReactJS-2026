@@ -35,8 +35,8 @@ function LoginPage() {
   const { login: loginContext } = useAuth();
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "admin@example.com",
+      password: "password123",
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
