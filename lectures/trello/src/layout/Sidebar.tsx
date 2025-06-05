@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { Home, Info } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
-import { clearStorage } from "../helpers/localStorage";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import { useAuth } from "../contexts/AuthContext";
 
 const drawerWidth = 240;
 
@@ -27,7 +27,7 @@ const Sidebar = ({
   isMobile,
 }: SidebarProps) => {
   const location = useLocation();
-
+  const { logout } = useAuth();
   const drawer = (
     <div>
       <Toolbar />
@@ -51,7 +51,7 @@ const Sidebar = ({
             component={Link}
             to="/Login"
             selected={location.pathname === "/login"}
-            onClick={clearStorage}
+            onClick={logout}
           >
             <ListItemIcon>
               <Info />

@@ -1,4 +1,5 @@
 import jsonServerInstance from "../api/jsonInstance";
+import type { Project } from "../interfaces/projectInterface";
 
 export const getProjectByUserId = async (userId: string) => {
   try {
@@ -10,12 +11,6 @@ export const getProjectByUserId = async (userId: string) => {
   }
 };
 
-interface Project {
-  id: string;
-  name: string;
-  owner: string;
-  date: string;
-}
 export const createProject = async (project: Project) => {
   try {
     const response = await jsonServerInstance.post("/projects", project);
