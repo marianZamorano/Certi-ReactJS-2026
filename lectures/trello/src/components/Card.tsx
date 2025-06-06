@@ -23,12 +23,14 @@ interface CustomCardProps {
   action?: () => void;
   project?: Project;
   deleteProject: () => void;
+  editProject: () => void;
 }
 export const CustomCard = ({
   title,
   action,
   project,
   deleteProject,
+  editProject,
 }: CustomCardProps) => {
   console.log(project);
   const { user, isAuth } = useAuth();
@@ -55,7 +57,14 @@ export const CustomCard = ({
         position: "relative",
       }}
     >
-      <CardActionArea onClick={action}>
+      <CardActionArea
+        onClick={(event) => {
+          event.stopPropagation();
+          if (action) {
+            action();
+          }
+        }}
+      >
         <CardMedia
           component="img"
           height="160"
@@ -98,6 +107,7 @@ export const CustomCard = ({
               <MenuItem
                 onClick={(event) => {
                   event.stopPropagation();
+                  editProject();
                   handleCloseMenu();
                 }}
               >
