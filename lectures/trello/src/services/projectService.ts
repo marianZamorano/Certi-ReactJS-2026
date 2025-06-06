@@ -43,3 +43,13 @@ export const updateProject = async (project: Project) => {
     throw error;
   }
 };
+
+export const getProjectById = async (projectId: string) => {
+  try {
+    const response = await jsonServerInstance.get(`/projects?id=${projectId}`);
+    return response.data[0];
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    throw error;
+  }
+};

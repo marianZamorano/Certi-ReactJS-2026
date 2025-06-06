@@ -173,6 +173,7 @@ function DashboardPage() {
                 action={() => {
                   goToProject(project.id);
                 }}
+                description={project.description}
                 title={project.name}
                 project={project}
                 deleteProject={() => removeProject(project.id)}

@@ -20,6 +20,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 interface CustomCardProps {
   title?: string;
+  description?: string;
   action?: () => void;
   project?: Project;
   deleteProject: () => void;
@@ -27,6 +28,7 @@ interface CustomCardProps {
 }
 export const CustomCard = ({
   title,
+  description,
   action,
   project,
   deleteProject,
@@ -79,8 +81,7 @@ export const CustomCard = ({
                 {title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                {description}
               </Typography>
             </Box>
             <IconButton

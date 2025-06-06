@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { Container, Typography, Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Container, Typography, Button, TextField, Box } from "@mui/material";
 import { DragDropContext } from "@hello-pangea/dnd";
 
 import Board from "./Board";
 import { v4 as uuidv4 } from "uuid";
+import { useParams } from "react-router-dom";
+import type { Project } from "../../interfaces/projectInterface";
+import { getProjectById } from "../../services/projectService";
+import { CustomDialogs } from "../../components/Dialog";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const initialData = {
   Pendiente: [
@@ -18,7 +24,7 @@ const initialData = {
       description: "MUI, react-dnd, etc.",
     },
   ],
-  "Rechazado": [],
+  Rechazado: [],
   "En Espera": [],
   "En Progreso": [
     {
@@ -39,8 +45,59 @@ const initialData = {
   ],
 };
 
+const taskSchema = Yup.object({
+  title: Yup.string().required(),
+  description: Yup.string().required(),
+});
+
 const ProjectPage = () => {
   const [columns, setColumns] = useState(initialData);
+  const [project, setProject] = useState({} as Project);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const { projectId } = useParams();
+
+  const getProjectFetch = async () => {
+    const response = await getProjectById(projectId);
+    setProject(response);
+  };
+
+  useEffect(() => {
+    getProjectFetch();
+  }, []);
+
+  const handleSubmit = (values) => {
+    console.log("HOLLAAA PARECE QUE SABES");
+    setColumns({
+      ...columns,
+      Pendiente: [
+        ...columns.Pendiente,
+        {
+          id: uuidv4(),
+          title: values.title,
+          description: values.description,
+        },
+      ],
+    });
+  };
+
+  const openDialogHandler = () => {
+    setOpenDialog(true);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      description: "",
+    },
+    validationSchema: taskSchema,
+    onSubmit: handleSubmit,
+  });
+
+  const closeDialogHandler = async () => {
+    await formik.resetForm();
+    setOpenDialog(false);
+  };
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -70,13 +127,45 @@ const ProjectPage = () => {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 4 }}>
+      <CustomDialogs
+        title="Agregar Tarea"
+        open={openDialog}
+        onClose={closeDialogHandler}
+        onSubmit={formik.handleSubmit}
+      >
+        <Box>
+          <TextField
+            label="Nombre de la Tarea"
+            id="title"
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            error={formik.touched.title && Boolean(formik.errors.title)}
+            helperText={formik.touched.title && formik.errors.title}
+          />
+          <TextField
+            label="Descripcion de la Tarea"
+            id="description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.description && Boolean(formik.errors.description)
+            }
+            helperText={formik.touched.description && formik.errors.description}
+          />
+        </Box>
+      </CustomDialogs>
       <Typography variant="h4" gutterBottom>
-        Ecommerce para ADIDAS
+        {project.name}
       </Typography>
       <Typography variant="body1" mb={2}>
-        Ecommerce en Remix y Shopify para ADIDAS
+        {project.description}
       </Typography>
-      <Button variant="contained" sx={{ mb: 3 }} color="secondary">
+      <Button
+        variant="contained"
+        sx={{ mb: 3 }}
+        color="secondary"
+        onClick={openDialogHandler}
+      >
         Agregar Tarea
       </Button>
       <DragDropContext onDragEnd={onDragEnd}>
