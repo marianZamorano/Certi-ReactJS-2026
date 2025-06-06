@@ -1,5 +1,5 @@
 import {
-  Box,  
+  Box,
   CssBaseline,
   Toolbar,
   useMediaQuery,
@@ -31,7 +31,10 @@ export const Layout = () => {
 
       <Box sx={{ flexGrow: 1 }}>
         <Navbar onMenuClick={handleDrawerToggle} />
-        <Box component="main" sx={{ p: 3 }}>
+        <Box
+          component="main"
+          sx={{ p: 3, backgroundColor: "#F9FAFB", minHeight: "100vh" }}
+        >
           <Toolbar />
           <Outlet />
         </Box>

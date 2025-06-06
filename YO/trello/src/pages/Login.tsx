@@ -16,6 +16,7 @@ import { login } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import Toast from "../components/toast";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const loginSchema = yup.object({
   email: yup
@@ -31,11 +32,11 @@ const loginSchema = yup.object({
 function LoginPage() {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState(false);
-
+  const { login: loginContext } = useAuth();
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "admin@example.com",
+      password: "password123",
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
@@ -45,7 +46,7 @@ function LoginPage() {
         formik.resetForm();
         return;
       }
-      localStorage.setItem("token", JSON.stringify(responseLogin.token));
+      loginContext(responseLogin);
       navigate("/app/dashboard", {
         replace: true,
       });
