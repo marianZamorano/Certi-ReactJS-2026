@@ -43,7 +43,6 @@ function LoginPage() {
     validationSchema: loginSchema,
     onSubmit: async (values) => {
       const responseLogin = await loginService(values.email, values.password);
-      debugger;
       if (!responseLogin) {
         setLoginError(true);
         formik.resetForm();
@@ -51,7 +50,6 @@ function LoginPage() {
       }
       // loginContext(responseLogin);
       login(responseLogin);
-      debugger;
       navigate("/app/dashboard", {
         replace: true,
       });

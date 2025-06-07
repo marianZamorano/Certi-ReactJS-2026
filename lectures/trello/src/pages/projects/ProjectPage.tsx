@@ -57,7 +57,6 @@ const ProjectPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const task = useTaskStore((state) => state.task)
   console.log(task);
-  debugger;
   const { projectId } = useParams();
 
   const getProjectFetch = async () => {
