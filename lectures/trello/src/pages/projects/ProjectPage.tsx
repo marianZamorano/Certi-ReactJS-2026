@@ -10,6 +10,7 @@ import { getProjectById } from "../../services/projectService";
 import { CustomDialogs } from "../../components/Dialog";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useTaskStore } from "../../store/useProjectStore";
 
 const initialData = {
   Pendiente: [
@@ -54,7 +55,9 @@ const ProjectPage = () => {
   const [columns, setColumns] = useState(initialData);
   const [project, setProject] = useState({} as Project);
   const [openDialog, setOpenDialog] = useState(false);
-
+  const task = useTaskStore((state) => state.task)
+  console.log(task);
+  debugger;
   const { projectId } = useParams();
 
   const getProjectFetch = async () => {
@@ -67,7 +70,6 @@ const ProjectPage = () => {
   }, []);
 
   const handleSubmit = (values) => {
-    console.log("HOLLAAA PARECE QUE SABES");
     setColumns({
       ...columns,
       Pendiente: [
@@ -133,7 +135,16 @@ const ProjectPage = () => {
         onClose={closeDialogHandler}
         onSubmit={formik.handleSubmit}
       >
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            mt: 1,
+            px: 1,
+            width: { xs: "100%", sm: "400px" },
+          }}
+        >
           <TextField
             label="Nombre de la Tarea"
             id="title"

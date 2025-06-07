@@ -22,6 +22,7 @@ import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
 import type { Project } from "../interfaces/projectInterface";
 import { useNavigate } from "react-router-dom";
+import { useTaskStore } from "../store/useProjectStore";
 
 const projectSchema = Yup.object({
   projectName: Yup.string().required("El nombre del proyecto es requerido"),
@@ -33,6 +34,10 @@ function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [project, setProject] = useState(null);
+
+  const task = useTaskStore((state) => state.task);
+  console.log("from Dashboard", task);
+  const deleteTask = useTaskStore((state) => state.deleteTask);
 
   const handleSubmit = async (values) => {
     let response;
@@ -108,6 +113,7 @@ function DashboardPage() {
     if (userStorage) {
       getProjects(userStorage.id);
     }
+    deleteTask();
   }, []);
 
   const goToProject = (projectId: string) => {
