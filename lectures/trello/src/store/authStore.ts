@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { User } from "../interfaces/userInterface";
 
 interface authStoreInterface {
@@ -8,9 +9,14 @@ interface authStoreInterface {
   logout: () => void;
 }
 
-export const useAuthStore = create<authStoreInterface>((set) => ({
-  user: {} as User,
-  isAuthenticated: false,
-  login: (user: User) => set({ user, isAuthenticated: true }),
-  logout: () => set({ user: {} as User, isAuthenticated: false }),
-}));
+export const useAuthStore = create<authStoreInterface>()(
+  persist(
+    (set) => ({
+      user: {} as User,
+      isAuthenticated: false,
+      login: (user: User) => set({ user, isAuthenticated: true }),
+      logout: () => set({ user: {} as User, isAuthenticated: false }),
+    }),
+    { name: "auth" }
+  )
+);

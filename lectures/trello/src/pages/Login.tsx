@@ -33,7 +33,6 @@ const loginSchema = yup.object({
 function LoginPage() {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState(false);
-  const { login: loginContext } = useAuth();
   const login  = useAuthStore((state)=> state.login);
 
   const formik = useFormik({
