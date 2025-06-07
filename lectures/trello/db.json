@@ -19,20 +19,37 @@
     {
       "id": "3",
       "name": "Project Gamma",
+      "description": "This is a sample project",
       "date": "2023-10-03",
       "owner": "2"
     },
     {
-      "id": "79409551-b8c5-4450-ab71-2a8ee0de605f",
-      "name": "Project X",
-      "owner": "1",
-      "date": "2025-06-03T22:19:53.078Z"
-    },
-    {
       "id": "b1d4a0e1-2059-4f35-9011-bea08b2175cd",
-      "name": "Proyecto Y ",
+      "name": "ProyecTo Pepito",
+      "description": "Proyecto de ejemplo para Pepito",
       "owner": "1",
       "date": "2025-06-03T22:20:50.009Z"
+    },
+    {
+      "id": "6370f6fd-c0aa-47f2-8739-c9d3268f60fa",
+      "name": "Proyecto X",
+      "description": "Descripción del Proyecto X",
+      "owner": "1",
+      "date": "2025-06-05T22:30:38.727Z"
+    },
+    {
+      "id": "ba8dce9c-19ea-4b3b-ac2f-d5a870579324",
+      "name": "Proyecto B",
+      "description": "Descripción del Proyecto B",
+      "owner": "1",
+      "date": "2025-06-05T22:35:58.797Z"
+    },
+    {
+      "id": "b3a9d084-5faa-427d-bcaf-b377ef9450dd",
+      "name": "Proyecto Z ",
+      "description": "Descripción del Proyecto Z",
+      "owner": "1",
+      "date": "2025-06-06T20:58:39.605Z"
     }
   ]
 }

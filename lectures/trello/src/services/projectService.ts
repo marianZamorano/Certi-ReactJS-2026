@@ -30,3 +30,26 @@ export const deleteProject = async (projectId: string) => {
     throw error;
   }
 };
+
+export const updateProject = async (project: Project) => {
+  try {
+    const response = await jsonServerInstance.put(
+      `/projects/${project.id}`,
+      project
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating project:", error);
+    throw error;
+  }
+};
+
+export const getProjectById = async (projectId: string) => {
+  try {
+    const response = await jsonServerInstance.get(`/projects?id=${projectId}`);
+    return response.data[0];
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    throw error;
+  }
+};

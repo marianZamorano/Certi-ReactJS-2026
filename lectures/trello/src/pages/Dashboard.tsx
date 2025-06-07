@@ -16,6 +16,7 @@ import {
   createProject,
   deleteProject,
   getProjectByUserId,
+  updateProject,
 } from "../services/projectService";
 import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
@@ -31,33 +32,57 @@ function DashboardPage() {
   const [user, setUser] = useState(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [project, setProject] = useState(null);
 
+  const handleSubmit = async (values) => {
+    let response;
+    if (project?.name) {
+      response = await updateProject({
+        ...project,
+        name: values.projectName,
+      });
+
+      if (response) {
+        setProjects((prevProjects) =>
+          prevProjects.map((p) => (p.id === response.id ? response : p))
+        );
+      }
+    } else {
+      response = await createProject({
+        id: uuidv4(),
+        name: values.projectName,
+        owner: user.id,
+        date: new Date().toISOString(),
+      });
+      if (response) {
+        setProjects((prevProjects) => [...prevProjects, response]);
+      }
+    }
+
+    formik.resetForm();
+    setProject(null);
+    setOpenDialog(false);
+  };
   const formik = useFormik({
     initialValues: {
       projectName: "",
     },
     validationSchema: projectSchema,
-    onSubmit: async (values) => {
-      const project = {
-        id: uuidv4(),
-        name: values.projectName,
-        owner: user.id,
-        date: new Date().toISOString(),
-      };
-      const response = await createProject(project);
-      if (response) {
-        setProjects((prevProjects) => [...prevProjects, response]);
-        formik.resetForm();
-      }
-      setOpenDialog(false);
-    },
+    onSubmit: handleSubmit,
   });
   const openDialogHandler = () => {
     setOpenDialog(true);
   };
 
-  const closeDialogHandler = () => {
+  const closeDialogHandler = async () => {
+    await formik.resetForm();
     setOpenDialog(false);
+  };
+
+  const editProjectHandler = async (project: Project) => {
+    formik.setValues({ projectName: project.name });
+    setProject(project);
+    setOpenDialog(true);
   };
 
   const removeProject = async (idProject: string) => {
@@ -92,7 +117,11 @@ function DashboardPage() {
   return (
     <Container maxWidth="lg">
       <CustomDialogs
-        title="Agregar Proyecto"
+        title={
+          formik.values.projectName !== ""
+            ? "Editar Proyecto"
+            : "Agregar Proyecto"
+        }
         open={openDialog}
         onClose={closeDialogHandler}
         onSubmit={formik.handleSubmit}
@@ -144,9 +173,11 @@ function DashboardPage() {
                 action={() => {
                   goToProject(project.id);
                 }}
+                description={project.description}
                 title={project.name}
                 project={project}
                 deleteProject={() => removeProject(project.id)}
+                editProject={() => editProjectHandler(project)}
               />
             </Grid>
           ))
