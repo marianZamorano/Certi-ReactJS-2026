@@ -12,11 +12,12 @@ import Container from "@mui/material/Container";
 import PasswordIcon from "@mui/icons-material/Password";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { login } from "../services/authService";
+import { login as loginService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import Toast from "../components/toast";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useAuthStore } from "../store/authStore";
 
 const loginSchema = yup.object({
   email: yup
@@ -33,6 +34,8 @@ function LoginPage() {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState(false);
   const { login: loginContext } = useAuth();
+  const login  = useAuthStore((state)=> state.login);
+
   const formik = useFormik({
     initialValues: {
       email: "admin@example.com",
@@ -40,13 +43,16 @@ function LoginPage() {
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
-      const responseLogin = await login(values.email, values.password);
+      const responseLogin = await loginService(values.email, values.password);
+      debugger;
       if (!responseLogin) {
         setLoginError(true);
         formik.resetForm();
         return;
       }
-      loginContext(responseLogin);
+      // loginContext(responseLogin);
+      login(responseLogin);
+      debugger;
       navigate("/app/dashboard", {
         replace: true,
       });
