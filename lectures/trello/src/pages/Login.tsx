@@ -1,5 +1,3 @@
-import { AccountCircle } from "@mui/icons-material";
-
 import {
   Box,
   Button,
@@ -10,57 +8,21 @@ import {
 } from "@mui/material";
 import Container from "@mui/material/Container";
 import PasswordIcon from "@mui/icons-material/Password";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { login as loginService } from "../services/authService";
-import { useNavigate } from "react-router-dom";
-import Toast from "../components/toast";
-import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { useAuthStore } from "../store/authStore";
+import { AccountCircle } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
-const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email("No es un email valido")
-    .required("El email es requerido"),
-  password: yup
-    .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
-    .required("La contraseña es requerida"),
-});
+import Toast from "../components/toast";
+import { useLogin } from "../hooks/useLogin";
 
 function LoginPage() {
-  const navigate = useNavigate();
-  const [loginError, setLoginError] = useState(false);
-  const login  = useAuthStore((state)=> state.login);
-
-  const formik = useFormik({
-    initialValues: {
-      email: "admin@example.com",
-      password: "password123",
-    },
-    validationSchema: loginSchema,
-    onSubmit: async (values) => {
-      const responseLogin = await loginService(values.email, values.password);
-      if (!responseLogin) {
-        setLoginError(true);
-        formik.resetForm();
-        return;
-      }
-      // loginContext(responseLogin);
-      login(responseLogin);
-      navigate("/app/dashboard", {
-        replace: true,
-      });
-    },
-  });
+  const { loginError, setLoginError, formik } = useLogin();
+  const { t } = useTranslation();
 
   return (
     <Container maxWidth="xs">
       <Toast
         open={loginError}
-        message="Usuario Incorrecto"
+        message={t("login.errorToastMessage")}
         severity="error"
         onClose={() => setLoginError(false)}
       />
@@ -80,13 +42,13 @@ function LoginPage() {
             component="h1"
             gutterBottom
           >
-            Iniciar Sesión
+            {t("login.title")}
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <TextField
               fullWidth
               id="input-email-textfield"
-              label="Email"
+              label={t("login.emailLabel")}
               name="email"
               onChange={formik.handleChange}
               value={formik.values.email}
@@ -107,7 +69,7 @@ function LoginPage() {
             <TextField
               fullWidth
               id="input-password-textfield"
-              label="Password"
+              label={t("login.passwordLabel")}
               type="password"
               name="password"
               onChange={formik.handleChange}
@@ -134,7 +96,7 @@ function LoginPage() {
               }}
               variant="contained"
             >
-              Login
+              {t("login.button")}
             </Button>
           </form>
         </CardContent>
