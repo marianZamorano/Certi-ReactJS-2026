@@ -1,14 +1,8 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { clearStorage, setStorage } from "../helpers/localStorage";
+import type { User } from "../interfaces/userInterface";
 
 // Crear la estructura del contexto
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  token: string;
-}
 
 interface AuthContextType {
   user: User;

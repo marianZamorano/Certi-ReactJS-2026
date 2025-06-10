@@ -6,6 +6,7 @@ import RegisterPage from "../pages/Register";
 import ProtectedRoutes from "../guards/ProtectedRoutes";
 import ProjectPage from "../pages/projects/ProjectPage";
 
+//TODO: agregar la pagina 404 y el * 
 export const AppRoutes = () => {
   return (
     <BrowserRouter>

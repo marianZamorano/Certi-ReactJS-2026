@@ -11,17 +11,20 @@ import { CustomDialogs } from "../components/Dialog";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { getStorage } from "../helpers/localStorage";
+
 import {
   createProject,
   deleteProject,
-  editProject,
   getProjectByUserId,
+  updateProject,
 } from "../services/projectService";
 import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
 import type { Project } from "../interfaces/projectInterface";
 import { useNavigate } from "react-router-dom";
+import { useTaskStore } from "../store/useProjectStore";
+import { useAuthStore } from "../store/authStore";
+import { useProjectsStore } from "../store/useProjectsStore";
 
 const projectSchema = Yup.object({
   projectName: Yup.string().required("El nombre del proyecto es requerido"),
@@ -29,66 +32,54 @@ const projectSchema = Yup.object({
 function DashboardPage() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const user = useAuthStore((state) => state.user);
+  const {fetchProjects, removeProject, createProject, updateProject, projects} = useProjectsStore((state) => state);
+  
   const [openDialog, setOpenDialog] = useState(false);
+  const [project, setProject] = useState(null);
 
+  const task = useTaskStore((state) => state.task);
+  console.log("from Dashboard", task);
+  const deleteTask = useTaskStore((state) => state.deleteTask);
+
+  const handleSubmit = async (values) => {
+    if (project?.name) {
+      updateProject({
+        ...project,
+        name: values.projectName,
+      });
+    } else {
+    }
+
+    formik.resetForm();
+    setProject(null);
+    setOpenDialog(false);
+  };
   const formik = useFormik({
     initialValues: {
       projectName: "",
     },
     validationSchema: projectSchema,
-    onSubmit: async (values) => {
-      const project = {
-        id: uuidv4(),
-        name: values.projectName,
-        owner: user.id,
-        date: new Date().toISOString(),
-      };
-      const response = await createProject(project);
-      if (response) {
-        setProjects((prevProjects) => [...prevProjects, response]);
-        formik.resetForm();
-      }
-      setOpenDialog(false);
-    },
+    onSubmit: handleSubmit,
   });
   const openDialogHandler = () => {
     setOpenDialog(true);
   };
 
-  const closeDialogHandler = () => {
+  const closeDialogHandler = async () => {
+    await formik.resetForm();
     setOpenDialog(false);
   };
 
-  const editProjectHandler = (project: Project) => {
-    formik.values.projectName = project.name;
+  const editProjectHandler = async (project: Project) => {
+    formik.setValues({ projectName: project.name });
+    setProject(project);
     setOpenDialog(true);
-  }
-
-  const removeProject = async (idProject: string) => {
-    await deleteProject(idProject);
-    setProjects((previewProject) =>
-      previewProject.filter((project) => project.id !== idProject)
-    );
-    console.log("deleting project");
-  };
-
-  const getProjects = async (userId: string) => {
-    try {
-      const projects = await getProjectByUserId(userId);
-      setProjects(projects);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-    }
   };
 
   useEffect(() => {
-    const userStorage = getStorage("user");
-    setUser(userStorage);
-    if (userStorage) {
-      getProjects(userStorage.id);
-    }
+    fetchProjects(user.id); 
+    deleteTask();
   }, []);
 
   const goToProject = (projectId: string) => {
@@ -98,7 +89,11 @@ function DashboardPage() {
   return (
     <Container maxWidth="lg">
       <CustomDialogs
-        title="Agregar Proyecto"
+        title={
+          formik.values.projectName !== ""
+            ? "Editar Proyecto"
+            : "Agregar Proyecto"
+        }
         open={openDialog}
         onClose={closeDialogHandler}
         onSubmit={formik.handleSubmit}
@@ -150,10 +145,11 @@ function DashboardPage() {
                 action={() => {
                   goToProject(project.id);
                 }}
+                description={project.description}
                 title={project.name}
                 project={project}
                 deleteProject={() => removeProject(project.id)}
-                editProject={()=>editProject()}
+                editProject={() => editProjectHandler(project)}
               />
             </Grid>
           ))

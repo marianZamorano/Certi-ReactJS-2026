@@ -17,10 +17,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import type { Project } from "../interfaces/projectInterface";
 import { useAuth } from "../contexts/AuthContext";
-import { editProject } from "../services/projectService";
 
 interface CustomCardProps {
   title?: string;
+  description?: string;
   action?: () => void;
   project?: Project;
   deleteProject: () => void;
@@ -28,6 +28,7 @@ interface CustomCardProps {
 }
 export const CustomCard = ({
   title,
+  description,
   action,
   project,
   deleteProject,
@@ -58,7 +59,14 @@ export const CustomCard = ({
         position: "relative",
       }}
     >
-      <CardActionArea onClick={action}>
+      <CardActionArea
+        onClick={(event) => {
+          event.stopPropagation();
+          if (action) {
+            action();
+          }
+        }}
+      >
         <CardMedia
           component="img"
           height="160"
@@ -73,8 +81,7 @@ export const CustomCard = ({
                 {title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                {description}
               </Typography>
             </Box>
             <IconButton
