@@ -33,9 +33,8 @@ function DashboardPage() {
   const navigate = useNavigate();
 
   const user = useAuthStore((state) => state.user);
-  const {fetchProjects, projects: projectsZustand} = useProjectsStore((state) => state);
-
-  const [projects, setProjects] = useState<Project[]>([]);
+  const {fetchProjects, removeProject, projects} = useProjectsStore((state) => state);
+  
   const [openDialog, setOpenDialog] = useState(false);
   const [project, setProject] = useState(null);
 
@@ -94,27 +93,8 @@ function DashboardPage() {
     setOpenDialog(true);
   };
 
-  const removeProject = async (idProject: string) => {
-    await deleteProject(idProject);
-    setProjects((previewProject) =>
-      previewProject.filter((project) => project.id !== idProject)
-    );
-    console.log("deleting project");
-  };
-
-  const getProjects = async (userId: string) => {
-    try {
-      const projects = await getProjectByUserId(userId);
-      setProjects(projects);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchProjects(user.id);
-    console.log('projects Zustand',projectsZustand);
-    getProjects(user.id);
+    fetchProjects(user.id); 
     deleteTask();
   }, []);
 
