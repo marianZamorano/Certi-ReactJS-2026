@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper, Typography, Box } from '@mui/material';
 import { Droppable } from "@hello-pangea/dnd";
 import TaskCard from './TaskCard'; // Adjust the import path as necessary
 

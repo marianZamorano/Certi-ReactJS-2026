@@ -6,91 +6,32 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { CustomCard } from "../components/Card";
 import { CustomDialogs } from "../components/Dialog";
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 
-import {
-  createProject,
-  deleteProject,
-  getProjectByUserId,
-  updateProject,
-} from "../services/projectService";
-import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
-import type { Project } from "../interfaces/projectInterface";
-import { useNavigate } from "react-router-dom";
-import { useTaskStore } from "../store/useProjectStore";
-import { useAuthStore } from "../store/authStore";
-import { useProjectsStore } from "../store/useProjectsStore";
 
-const projectSchema = Yup.object({
-  projectName: Yup.string().required("El nombre del proyecto es requerido"),
-});
+import { useProjects } from "../hooks/useProjects";
+
 function DashboardPage() {
-  const navigate = useNavigate();
-
-  const user = useAuthStore((state) => state.user);
-  const {fetchProjects, removeProject, createProject, updateProject, projects} = useProjectsStore((state) => state);
-  
-  const [openDialog, setOpenDialog] = useState(false);
-  const [project, setProject] = useState(null);
-
-  const task = useTaskStore((state) => state.task);
-  console.log("from Dashboard", task);
-  const deleteTask = useTaskStore((state) => state.deleteTask);
-
-  const handleSubmit = async (values) => {
-    if (project?.name) {
-      updateProject({
-        ...project,
-        name: values.projectName,
-      });
-    } else {
-    }
-
-    formik.resetForm();
-    setProject(null);
-    setOpenDialog(false);
-  };
-  const formik = useFormik({
-    initialValues: {
-      projectName: "",
-    },
-    validationSchema: projectSchema,
-    onSubmit: handleSubmit,
-  });
-  const openDialogHandler = () => {
-    setOpenDialog(true);
-  };
-
-  const closeDialogHandler = async () => {
-    await formik.resetForm();
-    setOpenDialog(false);
-  };
-
-  const editProjectHandler = async (project: Project) => {
-    formik.setValues({ projectName: project.name });
-    setProject(project);
-    setOpenDialog(true);
-  };
-
-  useEffect(() => {
-    fetchProjects(user.id); 
-    deleteTask();
-  }, []);
-
-  const goToProject = (projectId: string) => {
-    navigate(`/app/projects/${projectId}`);
-  };
-
+   const { t } = useTranslation();
+  const {
+    removeProject,
+    projects,
+    formik,
+    openDialog,
+    closeDialogHandler,
+    openDialogHandler,
+    goToProject,
+    editProjectHandler,
+    project
+  } = useProjects();
   return (
     <Container maxWidth="lg">
       <CustomDialogs
         title={
-          formik.values.projectName !== ""
+          project
             ? "Editar Proyecto"
             : "Agregar Proyecto"
         }

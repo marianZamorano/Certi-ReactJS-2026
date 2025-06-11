@@ -1,7 +1,11 @@
-import { updateProject } from './../services/projectService';
 import { create } from "zustand";
 import type { Project } from "../interfaces/projectInterface";
-import { deleteProject, getProjectByUserId } from "../services/projectService";
+import {
+  createProject,
+  deleteProject,
+  getProjectByUserId,
+  updateProject,
+} from "../services/projectService";
 
 interface ProjectStore {
   projects: Project[];
@@ -54,9 +58,9 @@ export const useProjectsStore = create<ProjectStore>((set) => ({
   createProject: async (project: Project) => {
     try {
       set({ isLoading: true });
-      const projectResponse = await createProject (project);
+      const projectResponse = await createProject(project);
       if (!projectResponse) {
-        throw new Error( "No se logro crear el proyecto")
+        throw new Error("No se logro Crear el proyecto");
       }
       set((state) => ({
         projects: [...state.projects, projectResponse],
@@ -73,13 +77,13 @@ export const useProjectsStore = create<ProjectStore>((set) => ({
   updateProject: async (project: Project) => {
     try {
       set({ isLoading: true });
-      const projectResponse = await updateProject (project);
+      const projectResponse = await updateProject(project);
       if (!projectResponse) {
-        throw new Error( "No se logro actualizar el proyecto")
+        throw new Error("No se logro Actualizar el proyecto");
       }
       set((state) => ({
         projects: state.projects.map((project) =>
-          project.id === projectResponse.id ? projectResponse: project
+          project.id === projectResponse.id ? projectResponse : project
         ),
       }));
     } catch (error) {
@@ -90,5 +94,5 @@ export const useProjectsStore = create<ProjectStore>((set) => ({
     } finally {
       set({ isLoading: false });
     }
-  }
+  },
 }));

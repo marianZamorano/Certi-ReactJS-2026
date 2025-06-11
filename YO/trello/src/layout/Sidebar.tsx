@@ -8,7 +8,7 @@ import {
   Toolbar,
   Divider,
 } from "@mui/material";
-import { Info } from "@mui/icons-material";
+import { Home, Info } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { useAuth } from "../contexts/AuthContext";

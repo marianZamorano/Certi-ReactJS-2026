@@ -1,22 +1,21 @@
 import {
   Box,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   IconButton,
-  ListItemIcon,
-  ListItemText,
   Menu,
   MenuItem,
   Typography,
+  Button,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
 import type { Project } from "../interfaces/projectInterface";
-import { useAuth } from "../contexts/AuthContext";
 
 interface CustomCardProps {
   title?: string;
@@ -26,17 +25,14 @@ interface CustomCardProps {
   deleteProject: () => void;
   editProject: () => void;
 }
+
 export const CustomCard = ({
   title,
   description,
   action,
-  project,
   deleteProject,
   editProject,
 }: CustomCardProps) => {
-  console.log(project);
-  const { user, isAuth } = useAuth();
-  console.log(user, isAuth);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -53,20 +49,14 @@ export const CustomCard = ({
     <Card
       sx={{
         maxWidth: 345,
-        borderRadius: 3,
-        boxShadow: 1,
+        borderRadius: 2,
+        border: "1px solid #e0e0e0",
+        boxShadow: 'none',
         overflow: "hidden",
         position: "relative",
       }}
     >
-      <CardActionArea
-        onClick={(event) => {
-          event.stopPropagation();
-          if (action) {
-            action();
-          }
-        }}
-      >
+      <Box position="relative">
         <CardMedia
           component="img"
           height="160"
@@ -74,67 +64,83 @@ export const CustomCard = ({
           alt={title}
           sx={{ objectFit: "cover" }}
         />
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="start">
-            <Box>
-              <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                {title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description}
-              </Typography>
-            </Box>
-            <IconButton
-              onClick={handleOpenMenu}
-              size="small"
-              sx={{ alignSelf: "flex-start" }}
-            >
-              <MoreVertIcon fontSize="small" />
-            </IconButton>
-
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleCloseMenu}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-            >
-              <MenuItem
-                onClick={(event) => {
-                  event.stopPropagation();
-                  editProject();
-                  handleCloseMenu();
-                }}
-              >
-                <ListItemIcon>
-                  <EditIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Editar proyecto" />
-              </MenuItem>
-
-              <MenuItem
-                onClick={(event) => {
-                  event.stopPropagation();
-                  deleteProject();
-                  handleCloseMenu();
-                }}
-                sx={{ color: "error.main" }}
-              >
-                <ListItemIcon sx={{ color: "error.main" }}>
-                  <DeleteIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Eliminar proyecto" />
-              </MenuItem>
-            </Menu>
-          </Box>
-        </CardContent>
-      </CardActionArea>
+        <IconButton
+          onClick={handleOpenMenu}
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            backgroundColor: "rgba(255,255,255,0.7)",
+            zIndex: 1,
+          }}
+        >
+          <MoreVertIcon fontSize="small" />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseMenu}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <MenuItem
+            onClick={(event) => {
+              event.stopPropagation();
+              editProject();
+              handleCloseMenu();
+            }}
+          >
+            <ListItemIcon>
+              <EditIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Editar proyecto" />
+          </MenuItem>
+          <MenuItem
+            onClick={(event) => {
+              event.stopPropagation();
+              deleteProject();
+              handleCloseMenu();
+            }}
+            sx={{ color: "error.main" }}
+          >
+            <ListItemIcon sx={{ color: "error.main" }}>
+              <DeleteIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Eliminar proyecto" />
+          </MenuItem>
+        </Menu>
+      </Box>
+      <CardContent>
+        <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          {description}
+        </Typography>
+        <Box mt={1} display="flex" justifyContent="flex-start">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={() => action && action()}
+            sx={{
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: "bold",
+              px: 3,
+            }}
+          >
+            Ver Proyecto
+          </Button>
+        </Box>
+      </CardContent>
     </Card>
   );
 };
