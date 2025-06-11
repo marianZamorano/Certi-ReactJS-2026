@@ -11,7 +11,7 @@ import { CustomDialogs } from "../components/Dialog";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { getStorage } from "../helpers/localStorage";
+
 import {
   createProject,
   deleteProject,
@@ -22,6 +22,9 @@ import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
 import type { Project } from "../interfaces/projectInterface";
 import { useNavigate } from "react-router-dom";
+import { useTaskStore } from "../store/useProjectStore";
+import { useAuthStore } from "../store/authStore";
+import { useProjectsStore } from "../store/useProjectsStore";
 
 const projectSchema = Yup.object({
   projectName: Yup.string().required("El nombre del proyecto es requerido"),
@@ -29,10 +32,15 @@ const projectSchema = Yup.object({
 function DashboardPage() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const user = useAuthStore((state) => state.user);
+  const {fetchProjects, removeProject, projects} = useProjectsStore((state) => state);
+  
   const [openDialog, setOpenDialog] = useState(false);
   const [project, setProject] = useState(null);
+
+  const task = useTaskStore((state) => state.task);
+  console.log("from Dashboard", task);
+  const deleteTask = useTaskStore((state) => state.deleteTask);
 
   const handleSubmit = async (values) => {
     let response;
@@ -85,29 +93,9 @@ function DashboardPage() {
     setOpenDialog(true);
   };
 
-  const removeProject = async (idProject: string) => {
-    await deleteProject(idProject);
-    setProjects((previewProject) =>
-      previewProject.filter((project) => project.id !== idProject)
-    );
-    console.log("deleting project");
-  };
-
-  const getProjects = async (userId: string) => {
-    try {
-      const projects = await getProjectByUserId(userId);
-      setProjects(projects);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-    }
-  };
-
   useEffect(() => {
-    const userStorage = getStorage("user");
-    setUser(userStorage);
-    if (userStorage) {
-      getProjects(userStorage.id);
-    }
+    fetchProjects(user.id); 
+    deleteTask();
   }, []);
 
   const goToProject = (projectId: string) => {
